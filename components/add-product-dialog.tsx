@@ -11,8 +11,7 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
-} from './ui/Drawer';
+} from '@/components/ui/drawer';
 
 import {
   Form,
