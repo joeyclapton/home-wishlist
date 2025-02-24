@@ -88,31 +88,35 @@ export function WishlistDetailClient() {
   };
 
   return (
-    <main className="container mx-auto min-h-screen max-w-md space-y-6 p-4">
-      <div className="flex items-center justify-between">
+    <main className="container mx-auto max-w-md overflow-hidden">
+      <header className="flex w-full items-center justify-between p-4">
         <div className="flex items-center gap-4">
           <Link href="/">
             <Button variant="ghost" size="icon">
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-7 w-7" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold">{wishlist?.name}</h1>
+          <h1 className="text-xl font-semibold">{wishlist?.name}</h1>
         </div>
         <Button variant="ghost" size="icon" onClick={deleteWishlist}>
-          <Trash2 className="h-5 w-5" color="#D9305D" />
+          <Trash2 strokeWidth={1.2} className="h-7 w-7" color="#D9305D" />
         </Button>
-      </div>
+      </header>
 
       <Button
         onClick={() => setIsAddingProduct(true)}
-        className="w-full gap-2"
-        size="lg"
+        className="fixed bottom-4 right-4 flex h-14 w-14 gap-2 rounded-full"
+        size="icon"
       >
-        <Plus className="h-5 w-5" />
-        Add Product
+        <Plus className="h-7 w-7" strokeWidth={1.2} />
       </Button>
 
-      <motion.div variants={container} initial="hidden" animate="show">
+      <motion.div
+        className="h-[calc(100vh-170px)] overflow-auto px-4"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         {products?.map((item) => (
           <ProductItem
             key={item.id}

@@ -5,12 +5,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQueryClient } from '@tanstack/react-query';
+
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from './ui/Drawer';
+
 import {
   Form,
   FormControl,
@@ -30,13 +33,22 @@ import {
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { ArrowUp, ArrowUp01Icon, FlagIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const flagColor = {
+  low: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-blue-800',
+  medium:
+    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 border-yellow-800',
+  high: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 border-red-800',
+};
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  priority: z.enum(['low', 'medium', 'high']),
+  priority: z.enum(['low', 'medium', 'high', '']),
 });
 
-interface AddProductDialogProps {
+interface AddProductDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   wishlistId: string;
@@ -46,7 +58,7 @@ export function AddProductDialog({
   open,
   onOpenChange,
   wishlistId,
-}: AddProductDialogProps) {
+}: AddProductDrawerProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -55,7 +67,7 @@ export function AddProductDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      priority: 'medium',
+      priority: '',
     },
   });
 
@@ -91,11 +103,17 @@ export function AddProductDialog({
       if (linkError) throw linkError;
 
       toast({
-        title: 'Success!',
-        description: 'Product has been added to your wishlist.',
+        description: 'Produto adicionado na listinha 🎉',
       });
 
-      queryClient.invalidateQueries({ queryKey: ['wishlist-products'] });
+      // Invalida ambas as queries
+      queryClient.invalidateQueries({
+        queryKey: ['wishlist-products', wishlistId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['wishlists'],
+      });
+
       onOpenChange(false);
       form.reset();
     } catch (error) {
@@ -110,11 +128,11 @@ export function AddProductDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add New Product</DialogTitle>
-        </DialogHeader>
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent className="h-[220px] p-4 sm:max-w-[425px]">
+        <DrawerHeader>
+          <DrawerTitle></DrawerTitle>
+        </DrawerHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -122,45 +140,55 @@ export function AddProductDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Coffee maker" {...field} />
+                    <Input placeholder="nome do produto" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="priority"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Priority</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="low">Low</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              Add Product
-            </Button>
+            <section className="flex justify-between gap-4">
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl className={cn(flagColor[field.value])}>
+                        <SelectTrigger>
+                          <FlagIcon
+                            className="mr-2"
+                            size={18}
+                            strokeWidth={1.2}
+                          />
+                          <SelectValue placeholder="Prioridade" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="low">Baixa</SelectItem>
+                        <SelectItem value="medium">Média</SelectItem>
+                        <SelectItem value="high">Alta</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                className="rounded-full"
+                type="submit"
+                size="icon"
+                disabled={isSubmitting || !form.formState.isValid}
+              >
+                <ArrowUp size={20} strokeWidth={4} />
+              </Button>
+            </section>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </DrawerContent>
+    </Drawer>
   );
 }

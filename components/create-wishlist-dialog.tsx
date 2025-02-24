@@ -42,6 +42,12 @@ export function CreateWishlistDialog() {
     },
   });
   const icons = ['🏡', '🍳', '🛁', '📺', '🛏️', '✂️', '🐈', '🛠️', '🛍️'];
+  const gradients = [
+    'bg-[#ffd977]',
+    'bg-[#c9f2f1]',
+    'bg-[#c7dab8]',
+    'bg-[#ffba78]',
+  ];
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -56,7 +62,6 @@ export function CreateWishlistDialog() {
       if (error) throw error;
 
       toast({
-        title: 'Success!',
         description: '✅ Wishlist criada com sucesso.',
       });
       setOpen(false);
@@ -102,20 +107,27 @@ export function CreateWishlistDialog() {
                 <FormItem>
                   <FormControl>
                     <div className="flex flex-row flex-wrap gap-2">
-                      {icons.map((icon) => (
-                        <Button
-                          key={icon}
-                          className={cn(
-                            'h-10 w-10 rounded-full border border-transparent bg-white hover:bg-white',
-                            field.value === icon && 'border-primary'
-                          )}
-                          size="icon"
-                          type="button"
-                          onClick={() => field.onChange(icon)}
-                        >
-                          {icon}
-                        </Button>
-                      ))}
+                      {icons.map((icon, index) => {
+                        const isSelected = field.value === icon;
+                        return (
+                          <Button
+                            key={icon}
+                            className={cn(
+                              'h-12 w-12 rounded-full hover:bg-transparent',
+                              isSelected && gradients[index % gradients.length]
+                            )}
+                            size="icon"
+                            variant="ghost"
+                            type="button"
+                            onClick={() => {
+                              field.onChange(icon);
+                              form.setValue('icon', icon);
+                            }}
+                          >
+                            {icon}
+                          </Button>
+                        );
+                      })}
                     </div>
                   </FormControl>
                   <FormMessage />
