@@ -61,7 +61,7 @@ export default function Home() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid h-[calc(100vh-200px)] gap-4 overflow-auto px-4"
+        className="grid gap-4"
       >
         {wishlists?.map((wishlist, index) => (
           <motion.div key={wishlist.id} variants={item}>

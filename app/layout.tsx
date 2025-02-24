@@ -17,12 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          inter.className,
-          ' overflow-hidden bg-background antialiased'
-        )}
-      >
+      <body className={cn(inter.className, 'bg-background antialiased')}>
         <Providers>{children}</Providers>
       </body>
     </html>
