@@ -29,17 +29,19 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  const { data: wishlists } = useQuery({
+  const { data: wishlists, isLoading } = useQuery({
     queryKey: ['wishlists'],
     queryFn: async () => {
       const supabase = createClient();
+      // Otimizando a consulta para trazer apenas os dados necessários
       const { data, error } = await supabase
         .from('wishlist')
-        .select('*, wishlist_products(*)');
+        .select('id, name, icon, wishlist_products(checked)');
 
       if (error) throw error;
       return data;
     },
+    staleTime: 1000 * 60 * 5, // Cache por 5 minutos
   });
 
   if (!mounted) return null;
@@ -57,27 +59,33 @@ export default function Home() {
 
       <CreateWishlistDialog />
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid gap-4"
-      >
-        {wishlists?.map((wishlist, index) => (
-          <motion.div key={wishlist.id} variants={item}>
-            <WishlistCard
-              id={wishlist.id}
-              name={wishlist.name}
-              icon={wishlist.icon}
-              totalItems={wishlist.wishlist_products.length}
-              completedItems={
-                wishlist.wishlist_products.filter((p) => p.checked).length
-              }
-              color={gradients[index % gradients.length]}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-primary"></div>
+        </div>
+      ) : (
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid gap-4"
+        >
+          {wishlists?.map((wishlist, index) => (
+            <motion.div key={wishlist.id} variants={item}>
+              <WishlistCard
+                id={wishlist.id}
+                name={wishlist.name}
+                icon={wishlist.icon}
+                totalItems={wishlist.wishlist_products.length}
+                completedItems={
+                  wishlist.wishlist_products.filter((p) => p.checked).length
+                }
+                color={gradients[index % gradients.length]}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </main>
   );
 }

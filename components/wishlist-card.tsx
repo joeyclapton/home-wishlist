@@ -25,7 +25,7 @@ export function WishlistCard({
   const progress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
 
   return (
-    <Link href={`/wishlist/${id}`}>
+    <Link href={`/wishlist/${id}`} prefetch>
       <div className="rounded-lg p-4" style={{ background: color }}>
         <div className="flex items-start justify-between">
           <div>
