@@ -107,7 +107,7 @@ export function CreateWishlistDialog() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="flex flex-row flex-wrap gap-2">
+                    <div className="flex flex-row flex-wrap justify-around gap-1">
                       {icons.map((icon, index) => {
                         const isSelected = field.value === icon;
 
@@ -115,7 +115,7 @@ export function CreateWishlistDialog() {
                           <Button
                             key={icon}
                             className={cn(
-                              'h-12 w-12 rounded-full hover:bg-transparent',
+                              'h-14 w-14 rounded-full hover:bg-transparent',
                               isSelected && gradients[index % gradients.length],
                               isSelected &&
                                 'hover:' + gradients[index % gradients.length]
