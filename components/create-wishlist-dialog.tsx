@@ -38,15 +38,16 @@ export function CreateWishlistDialog() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      icon: '',
+      icon: '🏷️',
     },
   });
-  const icons = ['🏡', '🍳', '🛁', '📺', '🛏️', '✂️', '🐈', '🛠️', '🛍️'];
+
+  const icons = ['🏡', '🍳', '🛁', '📺', '🛏️', '✂️', '🐈', '🛠️', '🛍️', '🏷️'];
   const gradients = [
-    'bg-[#ffd977]',
-    'bg-[#c9f2f1]',
-    'bg-[#c7dab8]',
-    'bg-[#ffba78]',
+    'bg-[#ffd97799]',
+    'bg-[#c9f2f199]',
+    'bg-[#c7dab899]',
+    'bg-[#ffba7899]',
   ];
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -82,7 +83,7 @@ export function CreateWishlistDialog() {
           Criar nova wishlist
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="p-4 sm:max-w-[425px]">
+      <DrawerContent className="m-auto p-4 sm:max-w-[425px]">
         <DrawerHeader>
           <DrawerTitle></DrawerTitle>
         </DrawerHeader>
@@ -109,18 +110,20 @@ export function CreateWishlistDialog() {
                     <div className="flex flex-row flex-wrap gap-2">
                       {icons.map((icon, index) => {
                         const isSelected = field.value === icon;
+
                         return (
                           <Button
                             key={icon}
                             className={cn(
                               'h-12 w-12 rounded-full hover:bg-transparent',
-                              isSelected && gradients[index % gradients.length]
+                              isSelected && gradients[index % gradients.length],
+                              isSelected &&
+                                'hover:' + gradients[index % gradients.length]
                             )}
                             size="icon"
                             variant="ghost"
                             type="button"
                             onClick={() => {
-                              field.onChange(icon);
                               form.setValue('icon', icon);
                             }}
                           >
