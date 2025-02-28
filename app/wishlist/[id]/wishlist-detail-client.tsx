@@ -131,7 +131,7 @@ export function WishlistDetailClient() {
         </div>
       ) : (
         <motion.div
-          className="h-[calc(100vh-170px)] overflow-auto px-4"
+          className="mb-20 h-[calc(100vh-170px)] overflow-auto"
           variants={container}
           initial="hidden"
           animate="show"
