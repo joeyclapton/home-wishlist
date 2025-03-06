@@ -37,7 +37,8 @@ export default function Home() {
       // Otimizando a consulta para trazer apenas os dados necessários
       const { data, error } = await supabase
         .from('wishlist')
-        .select('id, name, icon, wishlist_products(checked)');
+        .select('id, name, icon, wishlist_products(checked)')
+        .order('name', { ascending: true });
 
       if (error) throw error;
       return data;
