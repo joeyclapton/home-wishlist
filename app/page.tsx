@@ -47,7 +47,18 @@ export default function Home() {
 
   if (!mounted) return null;
 
-  const gradients = ['#ffd977', '#c9f2f1', '#c7dab8', '#ffba78'];
+  const gradients = [
+    '#F8C8DC', // Rosa claro
+    '#FFDFBA', // Pêssego suave
+    '#FAF4B7', // Amarelo pastel
+    '#C1E1C1', // Verde menta
+    '#A7C7E7', // Azul bebê
+    '#D5AAFF', // Lavanda suave
+    '#F5E1FD', // Lilás claro
+    '#FFD1DC', // Rosa algodão doce
+    '#B5EAD7', // Verde água pastel
+    '#FFDAC1', // Laranja pálido
+  ];
 
   return (
     <>

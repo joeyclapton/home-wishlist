@@ -20,7 +20,7 @@ export function WishlistCard({
   totalItems,
   completedItems,
   icon,
-  color = 'from-blue-500 to-purple-500',
+  color,
 }: WishlistCardProps) {
   const progress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
 

@@ -9,7 +9,9 @@ import { ProductItem } from '@/components/product-item';
 import { Badge } from '@/components/ui/badge';
 
 export default function TaskList() {
-  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
+  const [selectedPriority, setSelectedPriority] = useState<string | null>(
+    'high'
+  );
 
   const { data: tasks, isLoading } = useQuery({
     queryKey: ['tasks'],
@@ -28,7 +30,7 @@ export default function TaskList() {
           )
         `
         )
-        .order('priority', { foreignTable: 'product', ascending: false });
+        .order('checked', { ascending: true });
 
       if (error) throw error;
       return data;
@@ -55,9 +57,10 @@ export default function TaskList() {
     <>
       <main className="container mx-auto min-h-screen max-w-md space-y-6 p-4">
         <h1 className="text-center text-3xl font-bold">Lista de Produtos</h1>
-        <div className="mb-4 flex justify-center space-x-2">
+        <div className="flex justify-center space-x-2">
           {['low', 'medium', 'high'].map((priority) => (
             <Badge
+              className="px-8 py-2"
               key={priority}
               variant={selectedPriority === priority ? 'default' : 'outline'}
               onClick={() =>

@@ -8,6 +8,29 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+@font-face {
+  font-family: 'Fabio';
+  src: url('https://cdn.prod.website-files.com/6206cdeebf7cc52b0d91ce95/62326fef0c6d9a6ac5be1221_Fabio.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fabio';
+  src: url('https://cdn.prod.website-files.com/6206cdeebf7cc52b0d91ce95/62326ff89c156cd2cd5cd7ca_Fabio%20_XS.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+body,
+html {
+  font-family: Fabio, sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

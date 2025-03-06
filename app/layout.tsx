@@ -1,9 +1,6 @@
-import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import { cn } from '@/lib/utils';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'Home Wishlist',
@@ -17,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className, 'bg-background antialiased')}>
+      <body className={cn('bg-background antialiased')}>
         <Providers>{children}</Providers>
       </body>
     </html>

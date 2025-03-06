@@ -19,7 +19,7 @@ export function BottomNavbar() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-md">
-      <ul className="flex justify-around p-6">
+      <ul className="flex justify-around p-5">
         {menuList.map((item) => (
           <li key={item.path}>
             <Link
