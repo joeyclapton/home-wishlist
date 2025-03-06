@@ -6,6 +6,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
+import { Trash2 } from 'lucide-react';
+import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { useState } from 'react';
 
 interface ProductItemProps {
   id: string;
@@ -36,6 +48,8 @@ export function ProductItem({
   wishlistId,
 }: ProductItemProps) {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   async function toggleChecked() {
     const supabase = createClient();
@@ -54,12 +68,41 @@ export function ProductItem({
     );
   }
 
+  async function deleteProduct() {
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from('wishlist_products')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      queryClient.setQueryData(
+        ['wishlist-products', wishlistId],
+        (oldData: any) => {
+          return oldData.filter((item: any) => item.id !== id);
+        }
+      );
+
+      toast({
+        description: '✅ Produto excluído com sucesso',
+      });
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      toast({
+        description: '❌ Erro ao excluir produto',
+        variant: 'destructive',
+      });
+    }
+  }
+
   return (
     <>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex cursor-pointer items-center gap-4 rounded-lg bg-card p-2"
+        className="flex items-center gap-4 rounded-lg bg-card p-2"
       >
         <Checkbox
           className={cn('h-10 w-10 rounded-full')}
@@ -75,21 +118,60 @@ export function ProductItem({
           >
             {name}
           </p>
-          <div className="flex h-[18px] w-[50px] items-center justify-center">
+          <div className="flex items-center gap-2">
             {priority && (
               <span
                 className={cn(
-                  'mt-1 inline-block w-full rounded-full px-2 py-0.5 text-center text-xs font-medium',
+                  'mt-1 inline-block w-[50px] rounded-full px-2 py-0.5 text-center text-xs font-medium',
                   priorityColors[priority]
                 )}
               >
                 {priorityLabel[priority]}
               </span>
             )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDeleteDialogOpen(true);
+              }}
+            >
+              <Trash2 className="h-5 w-5 text-destructive opacity-45 opacity-50" />
+            </Button>
           </div>
         </div>
       </motion.div>
       <Separator className="my-2" />
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Excluir produto</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja excluir o produto <strong>"{name}"</strong>
+              ?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-row-reverse gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="w-full sm:w-auto"
+            >
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={deleteProduct}
+              className="w-full sm:w-auto"
+            >
+              Excluir
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
