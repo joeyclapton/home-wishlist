@@ -58,14 +58,16 @@ export function ProductItem({
       .update({ checked: !checked })
       .eq('id', id);
 
-    queryClient.setQueryData(
-      ['wishlist-products', wishlistId],
-      (oldData: any) => {
+    const queries = [['tasks'], ['wishlist-products', wishlistId]];
+
+    queries.forEach((queryKey) => {
+      queryClient.setQueryData(queryKey, (oldData: any) => {
+        if (!oldData) return oldData;
         return oldData.map((item: any) =>
           item.id === id ? { ...item, checked: !checked } : item
         );
-      }
-    );
+      });
+    });
   }
 
   async function deleteProduct() {
