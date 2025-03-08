@@ -79,13 +79,18 @@ export function CreateWishlistDialog() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button size="icon" variant="ghost" className="rounded-full bg-red-50">
+        <Button
+          size="icon"
+          variant="ghost"
+          className="rounded-full border border-[#275191]"
+        >
           <svg
             width="24"
             height="24"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="h-5"
           >
             <g clip-path="url(#clip0_1030_1834)">
               <path

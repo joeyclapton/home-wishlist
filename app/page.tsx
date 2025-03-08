@@ -64,16 +64,11 @@ export default function Home() {
 
   return (
     <>
-      <main className="container mx-auto min-h-screen max-w-md space-y-6 bg-[#fbfdf5]">
-        <div className="flex space-y-2 text-center">
-          <section>
-            <h1 className="text-3xl font-bold">🏡 Wishlist</h1>
-            <p className="text-sm text-muted-foreground">
-              Organizando suas listas de compras juntinhos
-            </p>
-          </section>
+      <main className="container mx-auto min-h-screen max-w-md space-y-4 bg-[#fbfdf5]">
+        <header className="flex justify-between p-4">
+          <h1 className="text-3xl font-bold">🏡 Wishlist</h1>
           <CreateWishlistDialog />
-        </div>
+        </header>
 
         {isLoading ? (
           <div className="flex justify-center py-8">
@@ -84,7 +79,7 @@ export default function Home() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="relative !mb-20 pt-4"
+            className="relative !mb-20 !mt-12"
           >
             {wishlists?.map((wishlist, index) => (
               <motion.div
