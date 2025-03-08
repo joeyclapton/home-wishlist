@@ -26,19 +26,19 @@ export function WishlistCard({
 
   return (
     <Link href={`/wishlist/${id}`} prefetch>
-      <div className="rounded-lg p-4" style={{ background: color }}>
+      <div className="rounded-lg px-4 py-12" style={{ background: color }}>
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-xl font-semibold">
               <span className="mr-2">{icon}</span>
               <span>{name}</span>
             </h3>
-            <p className="mt-1 text-sm text-black">
+            <p className="mt-1 text-xs">
               {completedItems} de {totalItems} itens
             </p>
           </div>
         </div>
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/20">
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/40">
           <motion.div
             className="h-full bg-black"
             initial={{ width: 0 }}

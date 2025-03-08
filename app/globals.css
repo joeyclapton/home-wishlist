@@ -29,6 +29,7 @@
 body,
 html {
   font-family: Fabio, sans-serif;
+  background: #fbfdf5;
 }
 
 @media (prefers-color-scheme: dark) {

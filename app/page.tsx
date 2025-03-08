@@ -7,6 +7,7 @@ import { CreateWishlistDialog } from '@/components/create-wishlist-dialog';
 import { WishlistCard } from '@/components/wishlist-card';
 import { createClient } from '@/lib/supabase/client';
 import { BottomNavbar } from '@/components/ui/bottom-navbar';
+import { cn } from '@/lib/utils';
 
 const container = {
   hidden: { opacity: 0 },
@@ -63,15 +64,16 @@ export default function Home() {
 
   return (
     <>
-      <main className="container mx-auto min-h-screen max-w-md space-y-6 p-4">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold">🏡 Wishlist</h1>
-          <p className="text-sm text-muted-foreground">
-            Organizando suas listas de compras juntinhos
-          </p>
+      <main className="container mx-auto min-h-screen max-w-md space-y-6 bg-[#fbfdf5]">
+        <div className="flex space-y-2 text-center">
+          <section>
+            <h1 className="text-3xl font-bold">🏡 Wishlist</h1>
+            <p className="text-sm text-muted-foreground">
+              Organizando suas listas de compras juntinhos
+            </p>
+          </section>
+          <CreateWishlistDialog />
         </div>
-
-        <CreateWishlistDialog />
 
         {isLoading ? (
           <div className="flex justify-center py-8">
@@ -82,10 +84,18 @@ export default function Home() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="!mb-20 grid gap-4"
+            className="relative !mb-20 pt-4"
           >
             {wishlists?.map((wishlist, index) => (
-              <motion.div key={wishlist.id} variants={item}>
+              <motion.div
+                className="sticky"
+                key={wishlist.id}
+                variants={item}
+                style={{
+                  marginTop: index === 0 ? '0' : '-10px',
+                  top: (index + 1) * 20 + 'px',
+                }} // Sobrepõe ligeiramente o card anterior
+              >
                 <WishlistCard
                   id={wishlist.id}
                   name={wishlist.name}
